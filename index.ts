@@ -11,12 +11,14 @@ router.get("/scrape", async (ctx) => {
     ctx.response.body = { error: 'Missing URL parameter' };
     return;
   }
+  console.log(url);
   try {
     const videoSrc = await scrapeVideoSrc(url);
     ctx.response.body = { videoSrc };
   } catch (error) {
+    console.error('Scraping error:', error);
     ctx.response.status = 500;
-    ctx.response.body = { error: 'Internal Server Error' };
+    ctx.response.body = { error: error.message || 'Internal Server Error' };
   }
 });
 app.use(router.routes());
